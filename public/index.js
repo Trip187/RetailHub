@@ -18,19 +18,19 @@ $(document).ready(function () {
     var $input = $(this);
     var $form = $input.closest("form");
 
-    $input.val($input.val().trimStart()); // trim leading spaces while typing
+    $input.val($input.val().trimStart());
 
-    clearTimeout(searchTimeout); // reset timer on each keystroke
+    clearTimeout(searchTimeout);
 
     var query = $input.val().trim();
 
     if (query === "") {
       clearTimeout(searchTimeout);
-      return; // don't search if empty
+      return;
     }
 
     searchTimeout = setTimeout(function () {
-      $form.submit(); // auto-submit after 500ms of no typing
+      $form.submit();
     }, 500);
   });
 
@@ -42,7 +42,6 @@ $(document).ready(function () {
     return savedCart ? JSON.parse(savedCart) : [];
   }
 
-  // Cart stored in memory (resets on page refresh — swap for localStorage if needed)
   var cart = loadCart();
 
   function updateBadge() {
@@ -100,7 +99,6 @@ $(document).ready(function () {
 
     $list.html(html);
     $("#cart-total").text("KSh " + grandTotal.toFixed(2));
-    $("#checkout-cart-data").val(JSON.stringify(cart));
     $footer.show();
   }
 
@@ -124,48 +122,105 @@ $(document).ready(function () {
     updateBadge();
     updateCartPanel();
 
-    // Flash the badge
     $("#cart-badge").addClass("animate__animated animate__bounceIn");
     setTimeout(function () {
       $("#cart-badge").removeClass("animate__animated animate__bounceIn");
     }, 600);
   }
 
-  $(document).ready(function () {
-    // Qty +/- buttons inside offcanvas
-    $(document).on("click", ".qty-btn", function () {
-      var index = $(this).data("index");
-      var delta = $(this).data("delta");
-      cart[index].qty += delta;
-      if (cart[index].qty <= 0) cart.splice(index, 1);
-      saveCart();
-      updateBadge();
-      updateCartPanel();
-    });
+  // ✅ M-Pesa pay button
+  $(document).on("click", "#pay-btn", function () {
+    var phone = $("#mpesa-phone").val().trim();
 
-    // Remove button
-    $(document).on("click", ".remove-btn", function () {
-      var index = $(this).data("index");
-      cart.splice(index, 1);
-      saveCart();
-      updateBadge();
-      updateCartPanel();
-    });
+    if (!phone) {
+      $("#pay-status")
+        .text("Please enter your M-Pesa phone number.")
+        .css("color", "red");
+      return;
+    }
 
-    // Add to cart buttons on product cards
-    $(document).on("click", ".add-to-cart-btn", function () {
-      var $btn = $(this);
-      var name = $btn.data("name");
-      var price = $btn.data("price");
-      var image = $btn.data("image");
-      var productId = $btn.data("product-id"); // ✅ add this
+    var grandTotal = cart.reduce(function (sum, item) {
+      return sum + item.price * item.qty;
+    }, 0);
 
-      addToCart(name, price, image, productId); // ✅ pass it
+    $("#pay-btn").text("Processing...").prop("disabled", true);
+    $("#pay-status")
+      .text("Check your phone for the M-Pesa prompt.")
+      .css("color", "#6d28d9");
 
-      $btn.text("Added ✓").prop("disabled", true);
-      setTimeout(function () {
-        $btn.text("Add to Cart").prop("disabled", false);
-      }, 1000);
-    });
+    fetch("/mpesa/pay", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        phone: phone,
+        amount: grandTotal,
+        cartData: cart,
+      }),
+    })
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (data) {
+        if (data.success) {
+          $("#pay-status")
+            .text("✅ Payment prompt sent! Complete on your phone.")
+            .css("color", "green");
+          cart = [];
+          saveCart();
+          updateBadge();
+          updateCartPanel();
+        } else {
+          $("#pay-status")
+            .text("❌ Payment failed. Try again.")
+            .css("color", "red");
+          $("#pay-btn").text("Pay with M-Pesa").prop("disabled", false);
+        }
+      })
+      .catch(function () {
+        $("#pay-status")
+          .text("❌ Network error. Try again.")
+          .css("color", "red");
+        $("#pay-btn").text("Pay with M-Pesa").prop("disabled", false);
+      });
   });
+
+  // Qty +/- buttons inside offcanvas
+  $(document).on("click", ".qty-btn", function () {
+    var index = $(this).data("index");
+    var delta = $(this).data("delta");
+    cart[index].qty += delta;
+    if (cart[index].qty <= 0) cart.splice(index, 1);
+    saveCart();
+    updateBadge();
+    updateCartPanel();
+  });
+
+  // Remove button
+  $(document).on("click", ".remove-btn", function () {
+    var index = $(this).data("index");
+    cart.splice(index, 1);
+    saveCart();
+    updateBadge();
+    updateCartPanel();
+  });
+
+  // Add to cart buttons on product cards
+  $(document).on("click", ".add-to-cart-btn", function () {
+    var $btn = $(this);
+    var name = $btn.data("name");
+    var price = $btn.data("price");
+    var image = $btn.data("image");
+    var productId = $btn.data("product-id");
+
+    addToCart(name, price, image, productId);
+
+    $btn.text("Added ✓").prop("disabled", true);
+    setTimeout(function () {
+      $btn.text("Add to Cart").prop("disabled", false);
+    }, 1000);
+  });
+
+  // Init on load
+  updateBadge();
+  updateCartPanel();
 });

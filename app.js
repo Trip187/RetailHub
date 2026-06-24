@@ -8,6 +8,7 @@ var loginRouter = require("./routes/users/users");
 var cartRouter = require("./routes/cart/addtoCart");
 var shopRouter = require("./routes/shop/shop");
 var adminProdAddRouter = require("./routes/admin/prodAdd");
+var mpesaRouter = require("./routes/cart/mpesa");
 var isAdmin = require("./routes/users/middleware/isAdmin");
 
 app.use(express.json());
@@ -31,6 +32,7 @@ app.use("/register", usersRouter);
 app.use("/login", loginRouter);
 app.use("/cart", cartRouter);
 app.use("/prodAdd", isAdmin, adminProdAddRouter); //isAdmin guard
+app.use("/mpesa", mpesaRouter);
 
 app.listen(3000, function () {
   console.log("Server running on port 3000");
