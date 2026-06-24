@@ -1,0 +1,190 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title id="title">Retail Shop</title>
+
+    <link rel="stylesheet" href="/bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/layout.css" />
+
+    <script src="/jquery-ui-1.14.2.custom/external/jquery/jquery.js"></script>
+    <script src="/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/index.js"></script>
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">EFFECTIVE</a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Left Navigation -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="/">Home</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                About Us
+              </a>
+
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/careers">Careers</a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <!-- Search -->
+          <form
+            class="search-form me-3"
+            role="search"
+            action="/search"
+            method="get"
+          >
+            <input
+              class="form-control"
+              type="search"
+              name="q"
+              placeholder="Search"
+              aria-label="Search"
+            />
+
+            <button class="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
+
+          <!-- Auth + Cart -->
+          <div class="d-flex align-items-center gap-3">
+            <div class="authentication d-flex align-items-center gap-2">
+              <p class="mb-0">
+                Don't have an account?
+                <a href="/register">Sign up</a>
+              </p>
+
+              <a class="btn btn-info btn-sm" href="/login">Login</a>
+            </div>
+
+            <div class="cartContainer position-relative">
+              <span
+                id="cart-icon"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#cartOffcanvas"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="28"
+                  height="28"
+                  fill="currentColor"
+                  class="bi bi-cart"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1
+                    .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607
+                    1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2
+                    2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2
+                    2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1
+                    1 0 1 1 0 2 1 1 0 0 1 0-2m7
+                    0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"
+                  />
+                </svg>
+
+                <span
+                  id="cart-badge"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  style="display: none; font-size: 0.65rem"
+                >
+                  0
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- SHOP LAYOUT -->
+    <div class="shop-layout">
+      <!-- SIDEBAR -->
+      <aside class="category-sidebar">
+        <div class="sidebar-title">Categories</div>
+
+        <div class="list-group">
+          <!--CATEGORIES-->
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="shop-main">
+        <div id="main-body">
+          <div id="message"></div>
+        </div>
+
+        <div id="content">
+          <div id="items">
+            <!--PRODUCTS-->
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- CART OFFCANVAS -->
+    <div
+      class="offcanvas offcanvas-end"
+      tabindex="-1"
+      id="cartOffcanvas"
+      aria-labelledby="cartOffcanvasLabel"
+      style="width: 380px"
+    >
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="cartOffcanvasLabel">Your Cart</h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+
+      <div class="offcanvas-body p-0">
+        <div id="cart-items-list" class="p-3">
+          <p class="text-muted text-center mt-4">Your cart is empty.</p>
+        </div>
+
+        <div class="border-top p-3" id="cart-footer" style="display: none">
+          <div class="d-flex justify-content-between mb-3">
+            <strong>Total</strong>
+            <strong id="cart-total">KSh 0.00</strong>
+          </div>
+
+          <form action="/cart/checkout" method="post" id="checkout-form">
+            <input type="hidden" name="cartData" id="checkout-cart-data" />
+
+            <button type="submit" class="btn btn-success w-100">
+              Checkout
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

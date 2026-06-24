@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="/bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+  </head>
+  <body style="background-color: #f0f2f5">
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-6 col-lg-5 col-xl-4">
+          <div class="card border-0 rounded-4 shadow">
+            <!-- Header -->
+            <div
+              class="card-header py-4 text-center rounded-top-4"
+              style="background: linear-gradient(135deg, #4f46e5, #7c3aed)"
+            >
+              <h3 class="text-white fw-bold mb-0">Welcome Back</h3>
+              <p class="text-white-50 mb-0 mt-1" style="font-size: 0.9rem">
+                Log in to your account
+              </p>
+            </div>
+
+            <!-- Body -->
+            <div class="card-body p-4 p-md-5">
+              <!-- Error box — shown via query string -->
+              <div id="error-box" class="alert alert-danger d-none mb-3"></div>
+
+              <form action="/login" method="post">
+                <!-- Email -->
+                <div class="mb-3">
+                  <label for="EmailAddress" class="form-label fw-semibold"
+                    >Email Address</label
+                  >
+                  <div class="input-group">
+                    <span
+                      class="input-group-text"
+                      style="
+                        background: #ede9fe;
+                        border-color: #c4b5fd;
+                        color: #6d28d9;
+                      "
+                      >✉</span
+                    >
+                    <input
+                      type="email"
+                      id="EmailAddress"
+                      name="EmailAddress"
+                      class="form-control"
+                      placeholder="john@example.com"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+                  <label for="Password" class="form-label fw-semibold"
+                    >Password</label
+                  >
+                  <div class="input-group">
+                    <span
+                      class="input-group-text"
+                      style="
+                        background: #ede9fe;
+                        border-color: #c4b5fd;
+                        color: #6d28d9;
+                      "
+                      >🔒</span
+                    >
+                    <input
+                      type="password"
+                      id="Password"
+                      name="Password"
+                      class="form-control"
+                      placeholder="Enter your password"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="d-grid mb-3">
+                  <button
+                    type="submit"
+                    class="btn btn-lg text-white fw-semibold"
+                    style="
+                      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                      border: none;
+                      border-radius: 8px;
+                    "
+                  >
+                    Log In
+                  </button>
+                </div>
+
+                <!-- Register link -->
+                <p
+                  class="text-center text-muted mb-0"
+                  style="font-size: 0.9rem"
+                >
+                  Don't have an account?
+                  <a
+                    href="/register"
+                    style="
+                      color: #7c3aed;
+                      text-decoration: none;
+                      font-weight: 600;
+                    "
+                  >
+                    Sign up
+                  </a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Show error from query string e.g. /login?error=Invalid+email
+      var params = new URLSearchParams(window.location.search);
+      var error = params.get("error");
+      if (error) {
+        var box = document.getElementById("error-box");
+        box.textContent = error;
+        box.classList.remove("d-none");
+      }
+    </script>
+  </body>
+</html>

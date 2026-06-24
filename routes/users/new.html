@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link rel="stylesheet" href="/bootstrap-5.3.8-dist/css/bootstrap.min.css" />
+  </head>
+  <body style="background-color: #f0f2f5">
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+          <div class="card border-0 rounded-4 shadow">
+            <!-- Header -->
+            <div
+              class="card-header py-4 text-center rounded-top-4"
+              style="background: linear-gradient(135deg, #4f46e5, #7c3aed)"
+            >
+              <h3 class="text-white fw-bold mb-0">Create Account</h3>
+              <p class="text-white-50 mb-0 mt-1" style="font-size: 0.9rem">
+                Join us today — it's free
+              </p>
+            </div>
+
+            <!-- Body -->
+            <div class="card-body p-4 p-md-5">
+              <!-- Error box — shown via query string -->
+              <div id="error-box" class="alert alert-danger d-none mb-3"></div>
+
+              <form action="/register" method="post">
+                <!-- Name Row -->
+                <div class="row mb-3">
+                  <div class="col-6">
+                    <label for="FirstName" class="form-label fw-semibold"
+                      >First Name</label
+                    >
+                    <input
+                      type="text"
+                      id="FirstName"
+                      name="FirstName"
+                      class="form-control"
+                      placeholder="John"
+                      required
+                    />
+                  </div>
+                  <div class="col-6">
+                    <label for="LastName" class="form-label fw-semibold"
+                      >Last Name</label
+                    >
+                    <input
+                      type="text"
+                      id="LastName"
+                      name="LastName"
+                      class="form-control"
+                      placeholder="Doe"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                  <label for="email" class="form-label fw-semibold"
+                    >Email Address</label
+                  >
+                  <div class="input-group">
+                    <span
+                      class="input-group-text"
+                      style="
+                        background: #ede9fe;
+                        border-color: #c4b5fd;
+                        color: #6d28d9;
+                      "
+                      >✉</span
+                    >
+                    <input
+                      type="email"
+                      id="email"
+                      name="EmailAddress"
+                      class="form-control"
+                      placeholder="john@example.com"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="mb-3">
+                  <label for="phone" class="form-label fw-semibold"
+                    >Phone</label
+                  >
+                  <div class="input-group">
+                    <span
+                      class="input-group-text"
+                      style="
+                        background: #ede9fe;
+                        border-color: #c4b5fd;
+                        color: #6d28d9;
+                      "
+                      >📞</span
+                    >
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      class="form-control"
+                      placeholder="+254 700 000 000"
+                    />
+                  </div>
+                </div>
+
+                <!-- City + Postal Code -->
+                <div class="row mb-3">
+                  <div class="col-7">
+                    <label for="city" class="form-label fw-semibold"
+                      >City</label
+                    >
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      class="form-control"
+                      placeholder="Nairobi"
+                    />
+                  </div>
+                  <div class="col-5">
+                    <label for="postalcode" class="form-label fw-semibold"
+                      >Postal Code</label
+                    >
+                    <input
+                      type="text"
+                      id="postalcode"
+                      name="postalcode"
+                      class="form-control"
+                      placeholder="00100"
+                    />
+                  </div>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+                  <label for="password" class="form-label fw-semibold"
+                    >Password</label
+                  >
+                  <div class="input-group">
+                    <span
+                      class="input-group-text"
+                      style="
+                        background: #ede9fe;
+                        border-color: #c4b5fd;
+                        color: #6d28d9;
+                      "
+                      >🔒</span
+                    >
+                    <input
+                      type="password"
+                      id="password"
+                      name="Password"
+                      class="form-control"
+                      placeholder="Create a password"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="d-grid mb-3">
+                  <button
+                    type="submit"
+                    class="btn btn-lg text-white fw-semibold"
+                    style="
+                      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                      border: none;
+                      border-radius: 8px;
+                    "
+                  >
+                    Create Account
+                  </button>
+                </div>
+
+                <!-- Login link -->
+                <p
+                  class="text-center text-muted mb-0"
+                  style="font-size: 0.9rem"
+                >
+                  Already have an account?
+                  <a
+                    href="/login"
+                    style="
+                      color: #7c3aed;
+                      text-decoration: none;
+                      font-weight: 600;
+                    "
+                  >
+                    Log in
+                  </a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      var params = new URLSearchParams(window.location.search);
+      var error = params.get("error");
+      if (error) {
+        var box = document.getElementById("error-box");
+        box.textContent = error;
+        box.classList.remove("d-none");
+      }
+    </script>
+  </body>
+</html>
