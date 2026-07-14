@@ -4,6 +4,7 @@ var session = require("express-session");
 var app = express();
 
 var usersRouter = require("./routes/users/registration");
+var aboutUsRouter = require("./routes/aboutUs/aboutUs");
 var loginRouter = require("./routes/users/users");
 var cartRouter = require("./routes/cart/addtoCart");
 var shopRouter = require("./routes/shop/shop");
@@ -30,6 +31,7 @@ app.use("/shop", shopRouter);
 app.use("/search", shopRouter);
 app.use("/register", usersRouter);
 app.use("/login", loginRouter);
+app.use("/about-us", aboutUsRouter);
 app.use("/cart", cartRouter);
 app.use("/prodAdd", isAdmin, adminProdAddRouter); //isAdmin guard
 app.use("/mpesa", mpesaRouter);

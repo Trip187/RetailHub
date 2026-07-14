@@ -128,7 +128,7 @@ $(document).ready(function () {
     }, 600);
   }
 
-  // ✅ M-Pesa pay button
+  // M-Pesa pay button
   $(document).on("click", "#pay-btn", function () {
     var phone = $("#mpesa-phone").val().trim();
 
@@ -163,7 +163,7 @@ $(document).ready(function () {
       .then(function (data) {
         if (data.success) {
           $("#pay-status")
-            .text("✅ Payment prompt sent! Complete on your phone.")
+            .text("Payment prompt sent! Complete on your phone.")
             .css("color", "green");
           cart = [];
           saveCart();
@@ -171,15 +171,13 @@ $(document).ready(function () {
           updateCartPanel();
         } else {
           $("#pay-status")
-            .text("❌ Payment failed. Try again.")
+            .text("Payment failed. Try again.")
             .css("color", "red");
           $("#pay-btn").text("Pay with M-Pesa").prop("disabled", false);
         }
       })
       .catch(function () {
-        $("#pay-status")
-          .text("❌ Network error. Try again.")
-          .css("color", "red");
+        $("#pay-status").text("Network error. Try again.").css("color", "red");
         $("#pay-btn").text("Pay with M-Pesa").prop("disabled", false);
       });
   });
@@ -223,4 +221,68 @@ $(document).ready(function () {
   // Init on load
   updateBadge();
   updateCartPanel();
+});
+
+// aboutUs.js
+$(function () {
+  // ---- About Us section ----
+  let aboutAnimated = false;
+  function animateAboutUs() {
+    $(".aboutUs h1").addClass("in");
+
+    // fixed: was $(".nav").fadeIn("slow") — fadeIn can't override
+    // visibility:hidden, and there was no .nav.visible CSS rule.
+    // Toggling a class lets the CSS transition handle it instead.
+    $(".nav").addClass("visible");
+
+    setTimeout(function () {
+      $(".aboutUs .about-img").addClass("in");
+    }, 0);
+    setTimeout(function () {
+      $(".aboutUs .about-text").addClass("in");
+    }, 1000);
+  }
+
+  // ---- Product categories section (slideshow, starts once in view) ----
+  let categoriesStarted = false;
+  function startCategorySlideshow() {
+    const $categories = $(".product-category");
+    let current = 0;
+    const slideDuration = 3000; // 3 seconds per slide
+
+    function showSlide(index) {
+      $categories.removeClass("active");
+      $categories.eq(index).addClass("active");
+    }
+
+    showSlide(current); // show the first slide immediately
+
+    setInterval(function () {
+      current = (current + 1) % $categories.length;
+      showSlide(current);
+    }, slideDuration);
+  }
+
+  // ---- Shared scroll listener ----
+  $(window)
+    .on("scroll", function () {
+      const scrollY = $(window).scrollTop() + $(window).height();
+
+      if (!aboutAnimated) {
+        const $about = $(".aboutUs");
+        if ($about.length && scrollY > $about.offset().top) {
+          aboutAnimated = true;
+          animateAboutUs();
+        }
+      }
+
+      if (!categoriesStarted) {
+        const $categories = $(".product-categories");
+        if ($categories.length && scrollY > $categories.offset().top + 100) {
+          categoriesStarted = true;
+          startCategorySlideshow();
+        }
+      }
+    })
+    .trigger("scroll");
 });
